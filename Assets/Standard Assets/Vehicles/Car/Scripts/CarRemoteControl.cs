@@ -17,7 +17,7 @@ namespace UnityStandardAssets.Vehicles.Car
         {
             // get the car controller
             m_Car = GetComponent<CarController>();
-            s = new Steering();
+            s = new Steering(m_Car);
             s.Start();
         }
 
@@ -33,5 +33,6 @@ namespace UnityStandardAssets.Vehicles.Car
 				m_Car.Move(SteeringAngle, Acceleration, Acceleration, 0f);
             }
         }
+
     }
 }

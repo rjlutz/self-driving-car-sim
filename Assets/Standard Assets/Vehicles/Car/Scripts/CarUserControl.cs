@@ -13,7 +13,7 @@ namespace UnityStandardAssets.Vehicles.Car
         private void Awake()
         {
             m_Car = GetComponent<CarController>();
-            s = new Steering();
+            s = new Steering(m_Car);
             s.Start();
         }
 

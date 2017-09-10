@@ -9,18 +9,8 @@ using System.Collections.Generic;
 
 namespace UnityStandardAssets.Vehicles.Car
 {
-    internal enum CarDriveType
-    {
-        FrontWheelDrive,
-        RearWheelDrive,
-        FourWheelDrive
-    }
-
-    internal enum SpeedType
-    {
-        MPH,
-        KPH
-    }
+    internal enum CarDriveType { FrontWheelDrive, RearWheelDrive, FourWheelDrive }
+    internal enum SpeedType { MPH, KPH }
 
     public class CarController : MonoBehaviour
     {
@@ -72,15 +62,37 @@ namespace UnityStandardAssets.Vehicles.Car
 
         public float BrakeInput { get; private set; }
 
-        private bool m_isRecording = false;
-        public bool IsRecording {
-            get
-            {
-                return m_isRecording;
-            }
+		public bool Cruising { get; set; }
 
-            set
-            {
+        private bool m_isRecording = false;
+
+		public void JumpTo(Vector3 position, Quaternion rotation) {
+			transform.position = position;
+			transform.rotation = rotation;
+			m_Rigidbody.velocity = new Vector3(0f,-10f,0f);
+			Move(0f, 0f, 0f, 0f);
+		}
+
+		public void BumpLeft(float amount) {
+			transform.position += transform.right * -amount;
+			Move(0f, 0f, 0f, 0f);
+		}
+
+		public void BumpRight(float amount) {
+			transform.position += transform.right * amount;
+			Move(0f, 0f, 0f, 0f);
+		}
+
+
+		public void GetTransform(out Vector3 position, out Quaternion rotation) {
+			position = transform.position;
+			rotation = transform.rotation;
+		}
+
+        public bool IsRecording {
+            get {return m_isRecording; }
+
+            set {
                 m_isRecording = value;
                 if(value == true)
                 { 
@@ -105,8 +117,7 @@ namespace UnityStandardAssets.Vehicles.Car
             }
 
         }
-
-
+			
 		public bool checkSaveLocation()
 		{
 			if (m_saveLocation != "") 
@@ -127,11 +138,17 @@ namespace UnityStandardAssets.Vehicles.Car
 
         public float CurrentSpeed{ get { return m_Rigidbody.velocity.magnitude * 2.23693629f; } }
 
-        public float MaxSpeed{ get { return m_Topspeed; } }
+		public float MaxSpeed{ get { return m_Topspeed; } }
 
         public float Revs { get; private set; }
 
         public float AccelInput { get; set; }
+
+		public float incrementSpeed(float amt) {
+			m_Topspeed = m_Topspeed + amt;
+			return m_Topspeed;
+		}
+
 
         // Use this for initialization
         private void Start ()
